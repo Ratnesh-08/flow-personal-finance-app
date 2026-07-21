@@ -3,13 +3,21 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Flow — Safe to Spend API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: income
+    description: Income entry operations
+  - name: bills
+    description: Fixed bill operations
+  - name: settings
+    description: User settings and buffer configuration
+  - name: dashboard
+    description: Aggregated dashboard data
 paths:
   /healthz:
     get:
@@ -24,6 +32,152 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /income:
+    get:
+      operationId: listIncome
+      tags: [income]
+      summary: List all income entries
+      responses:
+        "200":
+          description: List of income entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/IncomeEntry"
+    post:
+      operationId: createIncome
+      tags: [income]
+      summary: Create an income entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IncomeInput"
+      responses:
+        "201":
+          description: Created income entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncomeEntry"
+        "400":
+          description: Invalid input
+
+  /income/{id}:
+    delete:
+      operationId: deleteIncome
+      tags: [income]
+      summary: Delete an income entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /bills:
+    get:
+      operationId: listBills
+      tags: [bills]
+      summary: List all fixed bills
+      responses:
+        "200":
+          description: List of bills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bill"
+    post:
+      operationId: createBill
+      tags: [bills]
+      summary: Create a fixed bill
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillInput"
+      responses:
+        "201":
+          description: Created bill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "400":
+          description: Invalid input
+
+  /bills/{id}:
+    delete:
+      operationId: deleteBill
+      tags: [bills]
+      summary: Delete a fixed bill
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+        "404":
+          description: Not found
+
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [settings]
+      summary: Get user settings
+      responses:
+        "200":
+          description: User settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+    patch:
+      operationId: updateSettings
+      tags: [settings]
+      summary: Update user settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SettingsUpdate"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Settings"
+
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [dashboard]
+      summary: Get aggregated dashboard summary
+      responses:
+        "200":
+          description: Dashboard summary with safe-to-spend, buffer status, and recent activity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dashboard"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +188,127 @@ components:
       required:
         - status
 
+    IncomeEntry:
+      type: object
+      required: [id, amount, source, date]
+      properties:
+        id:
+          type: integer
+        amount:
+          type: number
+        source:
+          type: string
+        date:
+          type: string
+          format: date
+
+    IncomeInput:
+      type: object
+      required: [amount, date]
+      properties:
+        amount:
+          type: number
+        source:
+          type: string
+        date:
+          type: string
+          format: date
+
+    Bill:
+      type: object
+      required: [id, amount, name]
+      properties:
+        id:
+          type: integer
+        amount:
+          type: number
+        name:
+          type: string
+
+    BillInput:
+      type: object
+      required: [amount, name]
+      properties:
+        amount:
+          type: number
+        name:
+          type: string
+
+    Settings:
+      type: object
+      required: [bufferPct, bufferBalance, bufferGoalMonths, onboarded]
+      properties:
+        bufferPct:
+          type: number
+          description: Fraction of baseline income to reserve as buffer (e.g. 0.10 = 10%)
+        bufferBalance:
+          type: number
+          description: Current balance in the cushion buffer
+        bufferGoalMonths:
+          type: number
+          description: Number of months of baseline income to target for buffer
+        onboarded:
+          type: boolean
+          description: Whether the user has completed onboarding
+
+    SettingsUpdate:
+      type: object
+      properties:
+        bufferPct:
+          type: number
+        bufferBalance:
+          type: number
+        bufferGoalMonths:
+          type: number
+        onboarded:
+          type: boolean
+
+    ActivityItem:
+      type: object
+      required: [id, type, label, amount, date]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [income, bill]
+        label:
+          type: string
+        amount:
+          type: number
+        date:
+          type: ["string", "null"]
+
+    Dashboard:
+      type: object
+      required:
+        - safeToSpend
+        - baselineIncome
+        - totalBills
+        - bufferBalance
+        - bufferGoal
+        - bufferPct
+        - bufferGoalMonths
+        - onboarded
+        - recentActivity
+      properties:
+        safeToSpend:
+          type: number
+        baselineIncome:
+          type: number
+        totalBills:
+          type: number
+        bufferBalance:
+          type: number
+        bufferGoal:
+          type: number
+        bufferPct:
+          type: number
+        bufferGoalMonths:
+          type: number
+        onboarded:
+          type: boolean
+        recentActivity:
+          type: array
+          items:
+            $ref: "#/components/schemas/ActivityItem"

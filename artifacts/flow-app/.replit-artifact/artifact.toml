@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Flow — Safe to Spend"
+version = "1.0.0"
+id = "artifacts/flow-app"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 19125
+
+[services.development]
+run = "pnpm --filter @workspace/flow-app run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/flow-app", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/flow-app/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "19125"
+BASE_PATH = "/"

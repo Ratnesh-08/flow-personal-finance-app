@@ -1,0 +1,150 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-border: var(--primary-border);
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-secondary-border: var(--secondary-border);
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-muted-border: var(--muted-border);
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-accent-border: var(--accent-border);
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-destructive-border: var(--destructive-border);
+
+  --color-ink: hsl(var(--ink));
+  --color-paper: hsl(var(--paper));
+  --color-paper-raised: hsl(var(--paper-raised));
+  --color-gold: hsl(var(--gold));
+  --color-teal: hsl(var(--teal));
+  --color-coral: hsl(var(--coral));
+  --color-gray: hsl(var(--gray));
+
+  --font-sans: var(--app-font-sans);
+  --font-serif: var(--app-font-serif);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Flow Palette */
+  --ink: 213 28% 15%;
+  --paper: 72 11% 92%;
+  --paper-raised: 60 11% 96%;
+  --gold: 45 68% 47%;
+  --teal: 169 40% 31%;
+  --coral: 7 50% 52%;
+  --gray: 217 7% 57%;
+  
+  --background: var(--paper);
+  --foreground: var(--ink);
+  
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+  --card-border: 213 28% 88%;
+  
+  --popover: var(--paper-raised);
+  --popover-foreground: var(--ink);
+  --popover-border: 213 28% 88%;
+  
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  
+  --secondary: var(--paper-raised);
+  --secondary-foreground: var(--ink);
+  
+  --muted: 60 11% 90%;
+  --muted-foreground: var(--gray);
+  
+  --accent: var(--paper-raised);
+  --accent-foreground: var(--ink);
+  
+  --destructive: var(--coral);
+  --destructive-foreground: var(--paper);
+  
+  --border: 213 28% 88%; /* approx --line rgba(27,36,48,0.14) */
+  --input: 213 28% 88%;
+  --ring: var(--ink);
+  
+  --app-font-sans: 'IBM Plex Sans', sans-serif;
+  --app-font-serif: 'Fraunces', serif;
+  --app-font-mono: 'IBM Plex Mono', monospace;
+  
+  --radius: 0.75rem;
+
+  --shadow-2xs: 0px 2px 0px 0px rgba(27,36,48,0.05);
+  --shadow-xs: 0px 2px 0px 0px rgba(27,36,48,0.05);
+  --shadow-sm: 0px 2px 0px 0px rgba(27,36,48,0.05), 0px 1px 2px -1px rgba(27,36,48,0.05);
+  --shadow: 0px 2px 0px 0px rgba(27,36,48,0.05), 0px 1px 2px -1px rgba(27,36,48,0.05);
+  --shadow-md: 0px 2px 0px 0px rgba(27,36,48,0.05), 0px 2px 4px -1px rgba(27,36,48,0.05);
+  --shadow-lg: 0px 2px 0px 0px rgba(27,36,48,0.05), 0px 4px 6px -1px rgba(27,36,48,0.05);
+  --shadow-xl: 0px 2px 0px 0px rgba(27,36,48,0.05), 0px 8px 10px -1px rgba(27,36,48,0.05);
+  --shadow-2xl: 0px 2px 0px 0px rgba(27,36,48,0.05);
+}
+
+.dark {
+  /* Defaulting to same as light mode since it's a specific notebook vibe,
+     but normally we would invert. For now, forcing light mode as default
+     for the intended aesthetic. */
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-raised);
+  --card-foreground: var(--ink);
+  --card-border: 213 28% 88%;
+  --popover: var(--paper-raised);
+  --popover-foreground: var(--ink);
+  --popover-border: 213 28% 88%;
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --secondary: var(--paper-raised);
+  --secondary-foreground: var(--ink);
+  --muted: 60 11% 90%;
+  --muted-foreground: var(--gray);
+  --accent: var(--paper-raised);
+  --accent-foreground: var(--ink);
+  --destructive: var(--coral);
+  --destructive-foreground: var(--paper);
+  --border: 213 28% 88%;
+  --input: 213 28% 88%;
+  --ring: var(--ink);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
