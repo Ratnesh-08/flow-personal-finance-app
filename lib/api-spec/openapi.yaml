@@ -1,30 +1,28 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
-  version: 0.1.0
+  version: 0.2.0
   description: Flow — Safe to Spend API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
-    description: Health operations
   - name: income
-    description: Income entry operations
   - name: bills
-    description: Fixed bill operations
   - name: settings
-    description: User settings and buffer configuration
   - name: dashboard
-    description: Aggregated dashboard data
+  - name: analytics
+  - name: export
+  - name: recurring
+  - name: savings-goals
+  - name: demo
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -37,7 +35,34 @@ paths:
     get:
       operationId: listIncome
       tags: [income]
-      summary: List all income entries
+      summary: List income entries
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: dateFrom
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: amountMin
+          in: query
+          schema:
+            type: number
+        - name: amountMax
+          in: query
+          schema:
+            type: number
       responses:
         "200":
           description: List of income entries
@@ -68,6 +93,31 @@ paths:
           description: Invalid input
 
   /income/{id}:
+    patch:
+      operationId: updateIncome
+      tags: [income]
+      summary: Update an income entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IncomeInput"
+      responses:
+        "200":
+          description: Updated income entry
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IncomeEntry"
+        "404":
+          description: Not found
     delete:
       operationId: deleteIncome
       tags: [income]
@@ -88,7 +138,24 @@ paths:
     get:
       operationId: listBills
       tags: [bills]
-      summary: List all fixed bills
+      summary: List fixed bills
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: amountMin
+          in: query
+          schema:
+            type: number
+        - name: amountMax
+          in: query
+          schema:
+            type: number
       responses:
         "200":
           description: List of bills
@@ -119,6 +186,31 @@ paths:
           description: Invalid input
 
   /bills/{id}:
+    patch:
+      operationId: updateBill
+      tags: [bills]
+      summary: Update a fixed bill
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BillInput"
+      responses:
+        "200":
+          description: Updated bill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bill"
+        "404":
+          description: Not found
     delete:
       operationId: deleteBill
       tags: [bills]
@@ -169,28 +261,240 @@ paths:
     get:
       operationId: getDashboard
       tags: [dashboard]
-      summary: Get aggregated dashboard summary
+      summary: Aggregated dashboard summary with insights
       responses:
         "200":
-          description: Dashboard summary with safe-to-spend, buffer status, and recent activity
+          description: Dashboard summary
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Dashboard"
 
+  /analytics/monthly:
+    get:
+      operationId: getMonthlyAnalytics
+      tags: [analytics]
+      summary: Monthly income and bills data for charts
+      parameters:
+        - name: months
+          in: query
+          schema:
+            type: integer
+            default: 6
+      responses:
+        "200":
+          description: Monthly analytics data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MonthlyData"
+
+  /export/csv:
+    get:
+      operationId: exportCsv
+      tags: [export]
+      summary: Export all data as CSV
+      parameters:
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [income, bills, all]
+      responses:
+        "200":
+          description: CSV data
+          content:
+            text/csv:
+              schema:
+                type: string
+
+  /recurring:
+    get:
+      operationId: listRecurring
+      tags: [recurring]
+      summary: List recurring items
+      parameters:
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum: [income, bill]
+      responses:
+        "200":
+          description: List of recurring items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RecurringItem"
+    post:
+      operationId: createRecurring
+      tags: [recurring]
+      summary: Create a recurring item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecurringInput"
+      responses:
+        "201":
+          description: Created recurring item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecurringItem"
+
+  /recurring/{id}:
+    put:
+      operationId: updateRecurring
+      tags: [recurring]
+      summary: Update a recurring item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecurringInput"
+      responses:
+        "200":
+          description: Updated recurring item
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecurringItem"
+    delete:
+      operationId: deleteRecurring
+      tags: [recurring]
+      summary: Delete a recurring item
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /savings-goals:
+    get:
+      operationId: listSavingsGoals
+      tags: [savings-goals]
+      summary: List savings goals
+      responses:
+        "200":
+          description: List of savings goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SavingsGoal"
+    post:
+      operationId: createSavingsGoal
+      tags: [savings-goals]
+      summary: Create a savings goal
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavingsGoalInput"
+      responses:
+        "201":
+          description: Created savings goal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavingsGoal"
+
+  /savings-goals/{id}:
+    put:
+      operationId: updateSavingsGoal
+      tags: [savings-goals]
+      summary: Update a savings goal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SavingsGoalUpdate"
+      responses:
+        "200":
+          description: Updated savings goal
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SavingsGoal"
+    delete:
+      operationId: deleteSavingsGoal
+      tags: [savings-goals]
+      summary: Delete a savings goal
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /demo/load:
+    post:
+      operationId: loadDemoData
+      tags: [demo]
+      summary: Load demo data (clears and seeds)
+      responses:
+        "200":
+          description: Demo data loaded
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemoResult"
+
+  /demo/clear:
+    post:
+      operationId: clearAllData
+      tags: [demo]
+      summary: Clear all user data
+      responses:
+        "200":
+          description: All data cleared
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DemoResult"
+
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
 
     IncomeEntry:
       type: object
-      required: [id, amount, source, date]
+      required: [id, amount, source, date, category]
       properties:
         id:
           type: integer
@@ -201,6 +505,8 @@ components:
         date:
           type: string
           format: date
+        category:
+          type: string
 
     IncomeInput:
       type: object
@@ -213,16 +519,20 @@ components:
         date:
           type: string
           format: date
+        category:
+          type: string
 
     Bill:
       type: object
-      required: [id, amount, name]
+      required: [id, amount, name, category]
       properties:
         id:
           type: integer
         amount:
           type: number
         name:
+          type: string
+        category:
           type: string
 
     BillInput:
@@ -233,6 +543,8 @@ components:
           type: number
         name:
           type: string
+        category:
+          type: string
 
     Settings:
       type: object
@@ -240,16 +552,12 @@ components:
       properties:
         bufferPct:
           type: number
-          description: Fraction of baseline income to reserve as buffer (e.g. 0.10 = 10%)
         bufferBalance:
           type: number
-          description: Current balance in the cushion buffer
         bufferGoalMonths:
           type: number
-          description: Number of months of baseline income to target for buffer
         onboarded:
           type: boolean
-          description: Whether the user has completed onboarding
 
     SettingsUpdate:
       type: object
@@ -265,7 +573,7 @@ components:
 
     ActivityItem:
       type: object
-      required: [id, type, label, amount, date]
+      required: [id, type, label, amount, date, category]
       properties:
         id:
           type: integer
@@ -278,6 +586,27 @@ components:
           type: number
         date:
           type: ["string", "null"]
+        category:
+          type: string
+
+    DashboardInsights:
+      type: object
+      required: [dailyBudget, daysRemainingInMonth, savingsPct, spendingRate, projectedMonthEnd, budgetHealth]
+      properties:
+        dailyBudget:
+          type: number
+        daysRemainingInMonth:
+          type: integer
+        savingsPct:
+          type: number
+        spendingRate:
+          type: number
+        projectedMonthEnd:
+          type: number
+          description: Projected balance at end of month (safeToSpend - dailyBudget*daysRemaining placeholder)
+        budgetHealth:
+          type: string
+          enum: [excellent, good, fair, tight]
 
     Dashboard:
       type: object
@@ -291,6 +620,7 @@ components:
         - bufferGoalMonths
         - onboarded
         - recentActivity
+        - insights
       properties:
         safeToSpend:
           type: number
@@ -312,3 +642,124 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/ActivityItem"
+        insights:
+          $ref: "#/components/schemas/DashboardInsights"
+
+    MonthlyData:
+      type: object
+      required: [month, year, label, income, bills]
+      properties:
+        month:
+          type: integer
+        year:
+          type: integer
+        label:
+          type: string
+        income:
+          type: number
+        bills:
+          type: number
+
+    RecurringItem:
+      type: object
+      required: [id, type, name, amount, category, frequency, startDate, active]
+      properties:
+        id:
+          type: integer
+        type:
+          type: string
+          enum: [income, bill]
+        name:
+          type: string
+        amount:
+          type: number
+        category:
+          type: string
+        frequency:
+          type: string
+          enum: [daily, weekly, monthly, yearly]
+        startDate:
+          type: string
+          format: date
+        active:
+          type: boolean
+
+    RecurringInput:
+      type: object
+      required: [type, name, amount, frequency, startDate]
+      properties:
+        type:
+          type: string
+          enum: [income, bill]
+        name:
+          type: string
+        amount:
+          type: number
+        category:
+          type: string
+        frequency:
+          type: string
+          enum: [daily, weekly, monthly, yearly]
+        startDate:
+          type: string
+          format: date
+        active:
+          type: boolean
+
+    SavingsGoal:
+      type: object
+      required: [id, name, targetAmount, currentAmount, completed]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        deadline:
+          type: ["string", "null"]
+          format: date
+        completed:
+          type: boolean
+        createdAt:
+          type: string
+
+    SavingsGoalInput:
+      type: object
+      required: [name, targetAmount]
+      properties:
+        name:
+          type: string
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        deadline:
+          type: string
+          format: date
+        completed:
+          type: boolean
+
+    SavingsGoalUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        targetAmount:
+          type: number
+        currentAmount:
+          type: number
+        deadline:
+          type: string
+          format: date
+        completed:
+          type: boolean
+
+    DemoResult:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string

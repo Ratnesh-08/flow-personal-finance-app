@@ -1,0 +1,1 @@
+- [Flow v2 Architecture](flow-v2-architecture.md) — Full stack patterns, DB tables, API routes, frontend tabs, and a gotcha about settings.onboarded resetting after DB pushes.

@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Api
  * Flow — Safe to Spend API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 import type { ActivityItemType } from './activityItemType';
 
@@ -14,4 +14,5 @@ export interface ActivityItem {
   amount: number;
   /** @nullable */
   date: string | null;
+  category: string;
 }

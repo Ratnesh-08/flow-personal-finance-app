@@ -6,6 +6,7 @@ export const billsTable = pgTable("bills", {
   id: serial("id").primaryKey(),
   amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
   name: text("name").notNull(),
+  category: text("category").notNull().default("miscellaneous"),
 });
 
 export const insertBillSchema = createInsertSchema(billsTable).omit({ id: true });

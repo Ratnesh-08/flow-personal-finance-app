@@ -5,24 +5,29 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { BILL_CATEGORIES } from '../lib/categories';
+import { useCurrency } from '../hooks/useCurrency';
 
 export default function AddBillSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const queryClient = useQueryClient();
   const createBill = useCreateBill();
+  const { symbol } = useCurrency();
   const [amount, setAmount] = useState('');
   const [name, setName] = useState('');
+  const [category, setCategory] = useState(BILL_CATEGORIES[0].value);
 
   useEffect(() => {
     if (open) {
       setAmount('');
       setName('');
+      setCategory(BILL_CATEGORIES[0].value);
     }
   }, [open]);
 
   const handleSave = () => {
     if (!amount || !name) return;
     createBill.mutate(
-      { data: { amount: Number(amount), name } },
+      { data: { amount: Number(amount), name, category } },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getListBillsQueryKey() });
@@ -56,9 +61,23 @@ export default function AddBillSheet({ open, onOpenChange }: { open: boolean; on
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="bill-category" className="font-mono text-xs uppercase text-gray">Category</Label>
+            <select
+              id="bill-category"
+              className="flex h-10 w-full rounded-md border border-border/50 bg-paper px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {BILL_CATEGORIES.map(c => (
+                <option key={c.value} value={c.value}>{c.label}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="bill-amount" className="font-mono text-xs uppercase text-gray">Monthly Amount</Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray">{symbol}</span>
               <Input
                 id="bill-amount"
                 type="number"

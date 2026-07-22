@@ -1,9 +1,9 @@
-export function formatCurrency(amount: number): string {
-  // no decimal for whole numbers, $ prefix, commas for thousands
+export function formatCurrency(amount: number, currencyCode: string = 'USD'): string {
+  // no decimal for whole numbers, prefix symbol, commas for thousands
   const floored = Math.floor(amount);
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'USD',
+    currency: currencyCode,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(floored);

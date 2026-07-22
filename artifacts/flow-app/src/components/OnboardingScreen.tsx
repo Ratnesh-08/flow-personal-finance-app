@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import AddIncomeSheet from './AddIncomeSheet';
 import AddBillSheet from './AddBillSheet';
 import { InlineIncomeList, InlineBillsList } from './EntryList';
+import { useListBills } from '@workspace/api-client-react';
 
 export default function OnboardingScreen() {
   const [showIncomeSheet, setShowIncomeSheet] = useState(false);
@@ -14,6 +15,7 @@ export default function OnboardingScreen() {
   const queryClient = useQueryClient();
   const updateSettings = useUpdateSettings();
   const { data: income = [] } = useListIncome();
+  const { data: bills = [] } = useListBills();
   
   const handleCalculate = () => {
     updateSettings.mutate({ data: { onboarded: true } }, {
@@ -47,7 +49,7 @@ export default function OnboardingScreen() {
                 <Plus className="w-4 h-4" />
               </button>
             </div>
-            <InlineIncomeList />
+            <InlineIncomeList data={income} />
           </section>
 
           {/* Bills Section */}
@@ -62,7 +64,7 @@ export default function OnboardingScreen() {
                 <Plus className="w-4 h-4" />
               </button>
             </div>
-            <InlineBillsList />
+            <InlineBillsList data={bills} />
           </section>
         </div>
 

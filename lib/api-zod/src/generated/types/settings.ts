@@ -3,16 +3,12 @@
  * Do not edit manually.
  * Api
  * Flow — Safe to Spend API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 
 export interface Settings {
-  /** Fraction of baseline income to reserve as buffer (e.g. 0.10 = 10%) */
   bufferPct: number;
-  /** Current balance in the cushion buffer */
   bufferBalance: number;
-  /** Number of months of baseline income to target for buffer */
   bufferGoalMonths: number;
-  /** Whether the user has completed onboarding */
   onboarded: boolean;
 }

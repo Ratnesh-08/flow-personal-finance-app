@@ -93,7 +93,7 @@
   --destructive: var(--coral);
   --destructive-foreground: var(--paper);
   
-  --border: 213 28% 88%; /* approx --line rgba(27,36,48,0.14) */
+  --border: 213 28% 88%;
   --input: 213 28% 88%;
   --ring: var(--ink);
   
@@ -114,29 +114,42 @@
 }
 
 .dark {
-  /* Defaulting to same as light mode since it's a specific notebook vibe,
-     but normally we would invert. For now, forcing light mode as default
-     for the intended aesthetic. */
+  --ink: 213 28% 90%;
+  --paper: 213 20% 14%;
+  --paper-raised: 213 18% 18%;
+  --gold: 45 68% 47%;
+  --teal: 169 40% 31%;
+  --coral: 7 50% 52%;
+  --gray: 217 7% 57%;
+  
   --background: var(--paper);
   --foreground: var(--ink);
+  
   --card: var(--paper-raised);
   --card-foreground: var(--ink);
-  --card-border: 213 28% 88%;
+  --card-border: 213 28% 25%;
+  
   --popover: var(--paper-raised);
   --popover-foreground: var(--ink);
-  --popover-border: 213 28% 88%;
+  --popover-border: 213 28% 25%;
+  
   --primary: var(--ink);
   --primary-foreground: var(--paper);
+  
   --secondary: var(--paper-raised);
   --secondary-foreground: var(--ink);
-  --muted: 60 11% 90%;
+  
+  --muted: 213 28% 25%;
   --muted-foreground: var(--gray);
+  
   --accent: var(--paper-raised);
   --accent-foreground: var(--ink);
+  
   --destructive: var(--coral);
   --destructive-foreground: var(--paper);
-  --border: 213 28% 88%;
-  --input: 213 28% 88%;
+  
+  --border: 213 28% 25%;
+  --input: 213 28% 25%;
   --ring: var(--ink);
 }
 
@@ -145,6 +158,6 @@
     @apply border-border;
   }
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply font-sans antialiased bg-background text-foreground transition-colors duration-300;
   }
 }

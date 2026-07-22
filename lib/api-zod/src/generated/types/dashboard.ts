@@ -3,9 +3,10 @@
  * Do not edit manually.
  * Api
  * Flow — Safe to Spend API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 import type { ActivityItem } from './activityItem';
+import type { DashboardInsights } from './dashboardInsights';
 
 export interface Dashboard {
   safeToSpend: number;
@@ -17,4 +18,5 @@ export interface Dashboard {
   bufferGoalMonths: number;
   onboarded: boolean;
   recentActivity: ActivityItem[];
+  insights: DashboardInsights;
 }

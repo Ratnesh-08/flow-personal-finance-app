@@ -5,18 +5,23 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { INCOME_CATEGORIES } from '../lib/categories';
+import { useCurrency } from '../hooks/useCurrency';
 
 export default function AddIncomeSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const queryClient = useQueryClient();
   const createIncome = useCreateIncome();
+  const { symbol } = useCurrency();
   const [amount, setAmount] = useState('');
   const [source, setSource] = useState('');
+  const [category, setCategory] = useState(INCOME_CATEGORIES[0].value);
   const [date, setDate] = useState(() => new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
     if (open) {
       setAmount('');
       setSource('');
+      setCategory(INCOME_CATEGORIES[0].value);
       setDate(new Date().toISOString().split('T')[0]);
     }
   }, [open]);
@@ -24,7 +29,7 @@ export default function AddIncomeSheet({ open, onOpenChange }: { open: boolean; 
   const handleSave = () => {
     if (!amount || !date) return;
     createIncome.mutate(
-      { data: { amount: Number(amount), source, date } },
+      { data: { amount: Number(amount), source, date, category } },
       {
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: getListIncomeQueryKey() });
@@ -49,7 +54,7 @@ export default function AddIncomeSheet({ open, onOpenChange }: { open: boolean; 
           <div className="space-y-2">
             <Label htmlFor="income-amount" className="font-mono text-xs uppercase text-gray">Amount</Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray">{symbol}</span>
               <Input
                 id="income-amount"
                 type="number"
@@ -72,6 +77,20 @@ export default function AddIncomeSheet({ open, onOpenChange }: { open: boolean; 
               value={source}
               onChange={(e) => setSource(e.target.value)}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="income-category" className="font-mono text-xs uppercase text-gray">Category</Label>
+            <select
+              id="income-category"
+              className="flex h-10 w-full rounded-md border border-border/50 bg-paper px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              {INCOME_CATEGORIES.map(c => (
+                <option key={c.value} value={c.value}>{c.label}</option>
+              ))}
+            </select>
           </div>
 
           <div className="space-y-2">

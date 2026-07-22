@@ -1,0 +1,119 @@
+Improve and polish my existing "Flow – Safe to Spend" application without changing its overall premium minimalist aesthetic. Keep the current warm paper color palette, elegant typography, soft shadows, spacing, and card-based layout. The app should feel like a premium financial product similar to Apple, Linear, or Notion.
+
+1. Global Currency Support
+Add a currency selector in the top navigation (desktop) and an easily accessible location on mobile.
+Support:
+USD ($)
+INR (₹)
+EUR (€)
+GBP (£)
+CAD (C$)
+AUD (A$)
+SGD (S$)
+JPY (¥)
+Allow users to either:
+only change the currency symbol, or
+optionally enable live currency conversion using an exchange-rate API if feasible.
+Save the selected currency in local storage so it persists after refresh.
+Every monetary value in the app should update automatically, including:
+Safe to Spend
+Baseline Income
+Fixed Bills
+Cushion Buffer
+Income
+Bills
+Recent Activity
+Future pages and calculations.
+2. Better Mobile Experience
+Improve responsiveness for phones and tablets.
+Ensure cards, typography, spacing, and buttons scale beautifully.
+Navigation should remain easy to use on small screens.
+Eliminate any overflow or alignment issues.
+3. User Experience Improvements
+Add smooth animations for:
+tab switching
+numbers counting up
+progress bars
+card appearance
+hover states (desktop)
+Keep animations subtle and premium.
+4. Theme Support
+Add Light and Dark mode.
+Detect the user's system preference on first visit.
+Allow manual switching.
+Save the selected theme in local storage.
+Keep the same premium aesthetic in both themes.
+5. Better Dashboard
+Improve the Safe to Spend card with clearer visual hierarchy.
+Add a circular or linear budget progress visualization.
+Improve Cushion Buffer with a more attractive progress indicator.
+Display small financial insights like:
+Daily budget remaining
+Remaining days in month
+Monthly savings percentage
+Spending rate
+6. Charts
+
+Add elegant interactive charts:
+
+Monthly spending trend
+Income vs Expenses
+Category distribution
+Use a minimal design consistent with the existing UI.
+7. Categories
+
+Add categories such as:
+
+Housing
+Food
+Transport
+Shopping
+Entertainment
+Healthcare
+Education
+Travel
+Investments
+Miscellaneous
+Each category should have a subtle icon and color accent.
+8. Search & Filters
+Search transactions.
+Filter by:
+date
+amount
+category
+income
+expense
+9. Data Management
+Allow users to:
+export to CSV
+export to PDF
+import CSV
+Add a backup/restore option.
+10. Notifications
+
+Add subtle reminders for:
+
+upcoming bills
+overspending
+reaching savings goals
+low safe-to-spend balance
+11. Accessibility
+Improve keyboard navigation.
+Add ARIA labels.
+Maintain sufficient color contrast.
+Ensure screen-reader compatibility.
+12. Performance
+Optimize rendering.
+Lazy load heavy components.
+Reduce unnecessary re-renders.
+Maintain fast loading times.
+13. Code Quality
+Keep the code modular and well-structured.
+Use reusable React components.
+Maintain TypeScript safety.
+Do not introduce breaking changes.
+14. Preserve Existing Design
+Do NOT redesign the application from scratch.
+Keep the current branding, layout, spacing, typography, colors, and premium feel.
+Every new feature should blend naturally with the existing interface.
+The final result should feel like a polished Version 2.0 of the current application rather than a different product.

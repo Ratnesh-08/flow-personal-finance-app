@@ -7,6 +7,7 @@ export const incomeTable = pgTable("income", {
   amount: numeric("amount", { precision: 12, scale: 2 }).notNull(),
   source: text("source").notNull().default(""),
   date: date("date").notNull(),
+  category: text("category").notNull().default("other"),
 });
 
 export const insertIncomeSchema = createInsertSchema(incomeTable).omit({ id: true });

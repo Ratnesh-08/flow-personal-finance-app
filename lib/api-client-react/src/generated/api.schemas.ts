@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Api
  * Flow — Safe to Spend API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 export interface HealthStatus {
   status: string;
@@ -14,33 +14,33 @@ export interface IncomeEntry {
   amount: number;
   source: string;
   date: string;
+  category: string;
 }
 
 export interface IncomeInput {
   amount: number;
   source?: string;
   date: string;
+  category?: string;
 }
 
 export interface Bill {
   id: number;
   amount: number;
   name: string;
+  category: string;
 }
 
 export interface BillInput {
   amount: number;
   name: string;
+  category?: string;
 }
 
 export interface Settings {
-  /** Fraction of baseline income to reserve as buffer (e.g. 0.10 = 10%) */
   bufferPct: number;
-  /** Current balance in the cushion buffer */
   bufferBalance: number;
-  /** Number of months of baseline income to target for buffer */
   bufferGoalMonths: number;
-  /** Whether the user has completed onboarding */
   onboarded: boolean;
 }
 
@@ -66,6 +66,27 @@ export interface ActivityItem {
   amount: number;
   /** @nullable */
   date: string | null;
+  category: string;
+}
+
+export type DashboardInsightsBudgetHealth = typeof DashboardInsightsBudgetHealth[keyof typeof DashboardInsightsBudgetHealth];
+
+
+export const DashboardInsightsBudgetHealth = {
+  excellent: 'excellent',
+  good: 'good',
+  fair: 'fair',
+  tight: 'tight',
+} as const;
+
+export interface DashboardInsights {
+  dailyBudget: number;
+  daysRemainingInMonth: number;
+  savingsPct: number;
+  spendingRate: number;
+  /** Projected balance at end of month (safeToSpend - dailyBudget*daysRemaining placeholder) */
+  projectedMonthEnd: number;
+  budgetHealth: DashboardInsightsBudgetHealth;
 }
 
 export interface Dashboard {
@@ -78,5 +99,147 @@ export interface Dashboard {
   bufferGoalMonths: number;
   onboarded: boolean;
   recentActivity: ActivityItem[];
+  insights: DashboardInsights;
 }
+
+export interface MonthlyData {
+  month: number;
+  year: number;
+  label: string;
+  income: number;
+  bills: number;
+}
+
+export type RecurringItemType = typeof RecurringItemType[keyof typeof RecurringItemType];
+
+
+export const RecurringItemType = {
+  income: 'income',
+  bill: 'bill',
+} as const;
+
+export type RecurringItemFrequency = typeof RecurringItemFrequency[keyof typeof RecurringItemFrequency];
+
+
+export const RecurringItemFrequency = {
+  daily: 'daily',
+  weekly: 'weekly',
+  monthly: 'monthly',
+  yearly: 'yearly',
+} as const;
+
+export interface RecurringItem {
+  id: number;
+  type: RecurringItemType;
+  name: string;
+  amount: number;
+  category: string;
+  frequency: RecurringItemFrequency;
+  startDate: string;
+  active: boolean;
+}
+
+export type RecurringInputType = typeof RecurringInputType[keyof typeof RecurringInputType];
+
+
+export const RecurringInputType = {
+  income: 'income',
+  bill: 'bill',
+} as const;
+
+export type RecurringInputFrequency = typeof RecurringInputFrequency[keyof typeof RecurringInputFrequency];
+
+
+export const RecurringInputFrequency = {
+  daily: 'daily',
+  weekly: 'weekly',
+  monthly: 'monthly',
+  yearly: 'yearly',
+} as const;
+
+export interface RecurringInput {
+  type: RecurringInputType;
+  name: string;
+  amount: number;
+  category?: string;
+  frequency: RecurringInputFrequency;
+  startDate: string;
+  active?: boolean;
+}
+
+export interface SavingsGoal {
+  id: number;
+  name: string;
+  targetAmount: number;
+  currentAmount: number;
+  /** @nullable */
+  deadline?: string | null;
+  completed: boolean;
+  createdAt?: string;
+}
+
+export interface SavingsGoalInput {
+  name: string;
+  targetAmount: number;
+  currentAmount?: number;
+  deadline?: string;
+  completed?: boolean;
+}
+
+export interface SavingsGoalUpdate {
+  name?: string;
+  targetAmount?: number;
+  currentAmount?: number;
+  deadline?: string;
+  completed?: boolean;
+}
+
+export interface DemoResult {
+  message: string;
+}
+
+export type ListIncomeParams = {
+search?: string;
+category?: string;
+dateFrom?: string;
+dateTo?: string;
+amountMin?: number;
+amountMax?: number;
+};
+
+export type ListBillsParams = {
+search?: string;
+category?: string;
+amountMin?: number;
+amountMax?: number;
+};
+
+export type GetMonthlyAnalyticsParams = {
+months?: number;
+};
+
+export type ExportCsvParams = {
+type: ExportCsvType;
+};
+
+export type ExportCsvType = typeof ExportCsvType[keyof typeof ExportCsvType];
+
+
+export const ExportCsvType = {
+  income: 'income',
+  bills: 'bills',
+  all: 'all',
+} as const;
+
+export type ListRecurringParams = {
+type?: ListRecurringType;
+};
+
+export type ListRecurringType = typeof ListRecurringType[keyof typeof ListRecurringType];
+
+
+export const ListRecurringType = {
+  income: 'income',
+  bill: 'bill',
+} as const;
 

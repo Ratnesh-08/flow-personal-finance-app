@@ -3,7 +3,7 @@
  * Do not edit manually.
  * Api
  * Flow — Safe to Spend API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 
 export * from './activityItem';
@@ -11,8 +11,28 @@ export * from './activityItemType';
 export * from './bill';
 export * from './billInput';
 export * from './dashboard';
+export * from './dashboardInsights';
+export * from './dashboardInsightsBudgetHealth';
+export * from './demoResult';
+export * from './exportCsvParams';
+export * from './exportCsvType';
+export * from './getMonthlyAnalyticsParams';
 export * from './healthStatus';
 export * from './incomeEntry';
 export * from './incomeInput';
+export * from './listBillsParams';
+export * from './listIncomeParams';
+export * from './listRecurringParams';
+export * from './listRecurringType';
+export * from './monthlyData';
+export * from './recurringInput';
+export * from './recurringInputFrequency';
+export * from './recurringInputType';
+export * from './recurringItem';
+export * from './recurringItemFrequency';
+export * from './recurringItemType';
+export * from './savingsGoal';
+export * from './savingsGoalInput';
+export * from './savingsGoalUpdate';
 export * from './settings';
 export * from './settingsUpdate';

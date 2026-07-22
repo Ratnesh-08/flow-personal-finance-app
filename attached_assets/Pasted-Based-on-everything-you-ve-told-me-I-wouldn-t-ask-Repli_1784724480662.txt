@@ -1,0 +1,186 @@
+Based on everything you've told me, I **wouldn't ask Replit Agent to touch the existing features** since they're already working. Instead, I'd give it a focused prompt to add only the remaining premium features while preserving the current design.
+
+---
+
+## Prompt
+
+> Enhance the existing "Flow – Safe to Spend" application without changing or breaking any current functionality. Keep the current premium design, layout, typography, color palette, animations, dark mode, charts, currency selector, search, filters, and CSV export exactly as they are. Only add the following features while maintaining the existing UI and code quality.
+>
+> ### 1. PDF Export
+>
+> * Add a professional PDF export feature.
+> * Export a well-designed financial report containing:
+>
+>   * Current Safe to Spend
+>   * Total Income
+>   * Total Expenses
+>   * Savings
+>   * Category Breakdown
+>   * Charts (if possible)
+>   * Date Generated
+> * The PDF should have a premium, printable layout.
+>
+> ### 2. CSV Import
+>
+> * Allow users to import previously exported CSV files.
+> * Validate imported data.
+> * Prevent duplicate entries.
+> * Show friendly error messages for invalid CSV formats.
+>
+> ### 3. Recurring Transactions
+>
+> Add support for recurring:
+>
+> * Income
+> * Bills
+> * Expenses
+>
+> Frequencies:
+>
+> * Daily
+> * Weekly
+> * Monthly
+> * Yearly
+>
+> Display recurring items separately and automatically include them in calculations.
+>
+> ### 4. Savings Goals
+>
+> Add a Savings Goals section where users can:
+>
+> * Create multiple goals
+> * Set target amount
+> * Track progress
+> * See percentage completion
+> * Estimated completion date
+> * Mark goals as completed
+>
+> ### 5. Financial Insights
+>
+> Generate intelligent dashboard insights such as:
+>
+> * Spending increased/decreased compared to previous month
+> * Largest spending category
+> * Average daily spending
+> * Remaining daily budget
+> * Savings rate
+> * Projected month-end balance
+> * Budget health indicator
+>
+> Display them as premium insight cards.
+>
+> ### 6. Multiple Accounts
+>
+> Support multiple wallets/accounts:
+>
+> * Cash
+> * Bank
+> * Credit Card
+> * Savings
+> * Custom accounts
+>
+> Every transaction should belong to an account.
+>
+> ### 7. Edit & Delete Transactions
+>
+> Allow users to:
+>
+> * Edit transactions
+> * Delete transactions
+> * Undo accidental deletion
+>
+> ### 8. Empty States
+>
+> Create beautiful empty states for:
+>
+> * No transactions
+> * No charts
+> * No savings goals
+> * No accounts
+>   Include elegant illustrations or icons and helpful onboarding text.
+>
+> ### 9. Demo Data
+>
+> Add:
+>
+> * Load Demo Data
+> * Reset Demo Data
+> * Clear All Data
+>
+> Great for first-time users and product demos.
+>
+> ### 10. PWA Support
+>
+> Convert the app into a Progressive Web App:
+>
+> * Installable
+> * Offline support
+> * App manifest
+> * Service worker
+> * App icons
+>
+> ### 11. Better Error Handling
+>
+> * Validate all forms
+> * Prevent invalid values
+> * Handle unexpected errors gracefully
+> * Display elegant toast notifications for success, warning, and errors.
+>
+> ### 12. Accessibility
+>
+> Improve:
+>
+> * Keyboard navigation
+> * ARIA labels
+> * Screen reader support
+> * Focus indicators
+> * Color contrast
+>
+> ### 13. Performance
+>
+> Optimize:
+>
+> * Lazy loading
+> * Code splitting
+> * Memoization where appropriate
+> * Faster rendering
+> * Smaller bundle size
+>
+> ### 14. Documentation
+>
+> Create:
+>
+> * README.md
+> * Installation Guide
+> * Feature Documentation
+> * Customization Guide
+> * Deployment Guide
+> * Changelog
+>
+> ### 15. Commercial Quality
+>
+> Polish every screen to marketplace quality (Gumroad, Lemon Squeezy, ThemeForest). Remove any rough edges, inconsistent spacing, or UI bugs. Ensure all components are reusable, responsive, and production-ready.
+>
+> **Important:**
+>
+> * Do NOT redesign the app.
+> * Do NOT remove any existing feature.
+> * Do NOT break current functionality.
+> * Preserve the current premium visual style.
+> * Test every feature before marking the task complete.
+
+---
+
+### One feature I'd add that most finance apps miss
+
+A **"What If?" Budget Simulator**.
+
+Users can move sliders like:
+
+* Salary: ₹50,000 → ₹60,000
+* Rent: ₹12,000 → ₹10,000
+* Food: ₹6,000 → ₹5,000
+
+…and instantly see how their **Safe to Spend**, **Savings**, and **Monthly Balance** change before making real decisions.
+
+It's interactive, visually engaging, and a feature that helps your app stand out from typical expense trackers. It would make your template feel much more premium and memorable.

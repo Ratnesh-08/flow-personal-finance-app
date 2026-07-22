@@ -3,13 +3,12 @@
  * Do not edit manually.
  * Api
  * Flow — Safe to Spend API
- * OpenAPI spec version: 0.1.0
+ * OpenAPI spec version: 0.2.0
  */
 import * as zod from 'zod';
 
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
@@ -18,13 +17,23 @@ export const HealthCheckResponse = zod.object({
 
 
 /**
- * @summary List all income entries
+ * @summary List income entries
  */
+export const ListIncomeQueryParams = zod.object({
+  "search": zod.coerce.string().optional(),
+  "category": zod.coerce.string().optional(),
+  "dateFrom": zod.date().optional(),
+  "dateTo": zod.date().optional(),
+  "amountMin": zod.coerce.number().optional(),
+  "amountMax": zod.coerce.number().optional()
+})
+
 export const ListIncomeResponseItem = zod.object({
   "id": zod.number(),
   "amount": zod.number(),
   "source": zod.string(),
-  "date": zod.coerce.date()
+  "date": zod.coerce.date(),
+  "category": zod.string()
 })
 export const ListIncomeResponse = zod.array(ListIncomeResponseItem)
 
@@ -35,14 +44,39 @@ export const ListIncomeResponse = zod.array(ListIncomeResponseItem)
 export const CreateIncomeBody = zod.object({
   "amount": zod.number(),
   "source": zod.string().optional(),
-  "date": zod.coerce.date()
+  "date": zod.coerce.date(),
+  "category": zod.string().optional()
 })
 
 export const CreateIncomeResponse = zod.object({
   "id": zod.number(),
   "amount": zod.number(),
   "source": zod.string(),
-  "date": zod.coerce.date()
+  "date": zod.coerce.date(),
+  "category": zod.string()
+})
+
+
+/**
+ * @summary Update an income entry
+ */
+export const UpdateIncomeParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateIncomeBody = zod.object({
+  "amount": zod.number(),
+  "source": zod.string().optional(),
+  "date": zod.coerce.date(),
+  "category": zod.string().optional()
+})
+
+export const UpdateIncomeResponse = zod.object({
+  "id": zod.number(),
+  "amount": zod.number(),
+  "source": zod.string(),
+  "date": zod.coerce.date(),
+  "category": zod.string()
 })
 
 
@@ -57,12 +91,20 @@ export const DeleteIncomeResponse = zod.void()
 
 
 /**
- * @summary List all fixed bills
+ * @summary List fixed bills
  */
+export const ListBillsQueryParams = zod.object({
+  "search": zod.coerce.string().optional(),
+  "category": zod.coerce.string().optional(),
+  "amountMin": zod.coerce.number().optional(),
+  "amountMax": zod.coerce.number().optional()
+})
+
 export const ListBillsResponseItem = zod.object({
   "id": zod.number(),
   "amount": zod.number(),
-  "name": zod.string()
+  "name": zod.string(),
+  "category": zod.string()
 })
 export const ListBillsResponse = zod.array(ListBillsResponseItem)
 
@@ -72,13 +114,36 @@ export const ListBillsResponse = zod.array(ListBillsResponseItem)
  */
 export const CreateBillBody = zod.object({
   "amount": zod.number(),
-  "name": zod.string()
+  "name": zod.string(),
+  "category": zod.string().optional()
 })
 
 export const CreateBillResponse = zod.object({
   "id": zod.number(),
   "amount": zod.number(),
-  "name": zod.string()
+  "name": zod.string(),
+  "category": zod.string()
+})
+
+
+/**
+ * @summary Update a fixed bill
+ */
+export const UpdateBillParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateBillBody = zod.object({
+  "amount": zod.number(),
+  "name": zod.string(),
+  "category": zod.string().optional()
+})
+
+export const UpdateBillResponse = zod.object({
+  "id": zod.number(),
+  "amount": zod.number(),
+  "name": zod.string(),
+  "category": zod.string()
 })
 
 
@@ -96,10 +161,10 @@ export const DeleteBillResponse = zod.void()
  * @summary Get user settings
  */
 export const GetSettingsResponse = zod.object({
-  "bufferPct": zod.number().describe('Fraction of baseline income to reserve as buffer (e.g. 0.10 = 10%)'),
-  "bufferBalance": zod.number().describe('Current balance in the cushion buffer'),
-  "bufferGoalMonths": zod.number().describe('Number of months of baseline income to target for buffer'),
-  "onboarded": zod.boolean().describe('Whether the user has completed onboarding')
+  "bufferPct": zod.number(),
+  "bufferBalance": zod.number(),
+  "bufferGoalMonths": zod.number(),
+  "onboarded": zod.boolean()
 })
 
 
@@ -114,15 +179,15 @@ export const UpdateSettingsBody = zod.object({
 })
 
 export const UpdateSettingsResponse = zod.object({
-  "bufferPct": zod.number().describe('Fraction of baseline income to reserve as buffer (e.g. 0.10 = 10%)'),
-  "bufferBalance": zod.number().describe('Current balance in the cushion buffer'),
-  "bufferGoalMonths": zod.number().describe('Number of months of baseline income to target for buffer'),
-  "onboarded": zod.boolean().describe('Whether the user has completed onboarding')
+  "bufferPct": zod.number(),
+  "bufferBalance": zod.number(),
+  "bufferGoalMonths": zod.number(),
+  "onboarded": zod.boolean()
 })
 
 
 /**
- * @summary Get aggregated dashboard summary
+ * @summary Aggregated dashboard summary with insights
  */
 export const GetDashboardResponse = zod.object({
   "safeToSpend": zod.number(),
@@ -138,8 +203,219 @@ export const GetDashboardResponse = zod.object({
   "type": zod.enum(['income', 'bill']),
   "label": zod.string(),
   "amount": zod.number(),
-  "date": zod.string().nullable()
-}))
+  "date": zod.string().nullable(),
+  "category": zod.string()
+})),
+  "insights": zod.object({
+  "dailyBudget": zod.number(),
+  "daysRemainingInMonth": zod.number(),
+  "savingsPct": zod.number(),
+  "spendingRate": zod.number(),
+  "projectedMonthEnd": zod.number().describe('Projected balance at end of month (safeToSpend - dailyBudget\*daysRemaining placeholder)'),
+  "budgetHealth": zod.enum(['excellent', 'good', 'fair', 'tight'])
+})
+})
+
+
+/**
+ * @summary Monthly income and bills data for charts
+ */
+export const getMonthlyAnalyticsQueryMonthsDefault = 6;
+
+export const GetMonthlyAnalyticsQueryParams = zod.object({
+  "months": zod.coerce.number().default(getMonthlyAnalyticsQueryMonthsDefault)
+})
+
+export const GetMonthlyAnalyticsResponseItem = zod.object({
+  "month": zod.number(),
+  "year": zod.number(),
+  "label": zod.string(),
+  "income": zod.number(),
+  "bills": zod.number()
+})
+export const GetMonthlyAnalyticsResponse = zod.array(GetMonthlyAnalyticsResponseItem)
+
+
+/**
+ * @summary Export all data as CSV
+ */
+export const ExportCsvQueryParams = zod.object({
+  "type": zod.enum(['income', 'bills', 'all'])
+})
+
+export const ExportCsvResponse = zod.unknown()
+
+
+/**
+ * @summary List recurring items
+ */
+export const ListRecurringQueryParams = zod.object({
+  "type": zod.enum(['income', 'bill']).optional()
+})
+
+export const ListRecurringResponseItem = zod.object({
+  "id": zod.number(),
+  "type": zod.enum(['income', 'bill']),
+  "name": zod.string(),
+  "amount": zod.number(),
+  "category": zod.string(),
+  "frequency": zod.enum(['daily', 'weekly', 'monthly', 'yearly']),
+  "startDate": zod.coerce.date(),
+  "active": zod.boolean()
+})
+export const ListRecurringResponse = zod.array(ListRecurringResponseItem)
+
+
+/**
+ * @summary Create a recurring item
+ */
+export const CreateRecurringBody = zod.object({
+  "type": zod.enum(['income', 'bill']),
+  "name": zod.string(),
+  "amount": zod.number(),
+  "category": zod.string().optional(),
+  "frequency": zod.enum(['daily', 'weekly', 'monthly', 'yearly']),
+  "startDate": zod.coerce.date(),
+  "active": zod.boolean().optional()
+})
+
+export const CreateRecurringResponse = zod.object({
+  "id": zod.number(),
+  "type": zod.enum(['income', 'bill']),
+  "name": zod.string(),
+  "amount": zod.number(),
+  "category": zod.string(),
+  "frequency": zod.enum(['daily', 'weekly', 'monthly', 'yearly']),
+  "startDate": zod.coerce.date(),
+  "active": zod.boolean()
+})
+
+
+/**
+ * @summary Update a recurring item
+ */
+export const UpdateRecurringParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateRecurringBody = zod.object({
+  "type": zod.enum(['income', 'bill']),
+  "name": zod.string(),
+  "amount": zod.number(),
+  "category": zod.string().optional(),
+  "frequency": zod.enum(['daily', 'weekly', 'monthly', 'yearly']),
+  "startDate": zod.coerce.date(),
+  "active": zod.boolean().optional()
+})
+
+export const UpdateRecurringResponse = zod.object({
+  "id": zod.number(),
+  "type": zod.enum(['income', 'bill']),
+  "name": zod.string(),
+  "amount": zod.number(),
+  "category": zod.string(),
+  "frequency": zod.enum(['daily', 'weekly', 'monthly', 'yearly']),
+  "startDate": zod.coerce.date(),
+  "active": zod.boolean()
+})
+
+
+/**
+ * @summary Delete a recurring item
+ */
+export const DeleteRecurringParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteRecurringResponse = zod.void()
+
+
+/**
+ * @summary List savings goals
+ */
+export const ListSavingsGoalsResponseItem = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "targetAmount": zod.number(),
+  "currentAmount": zod.number(),
+  "deadline": zod.coerce.date().nullish(),
+  "completed": zod.boolean(),
+  "createdAt": zod.string().optional()
+})
+export const ListSavingsGoalsResponse = zod.array(ListSavingsGoalsResponseItem)
+
+
+/**
+ * @summary Create a savings goal
+ */
+export const CreateSavingsGoalBody = zod.object({
+  "name": zod.string(),
+  "targetAmount": zod.number(),
+  "currentAmount": zod.number().optional(),
+  "deadline": zod.coerce.date().optional(),
+  "completed": zod.boolean().optional()
+})
+
+export const CreateSavingsGoalResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "targetAmount": zod.number(),
+  "currentAmount": zod.number(),
+  "deadline": zod.coerce.date().nullish(),
+  "completed": zod.boolean(),
+  "createdAt": zod.string().optional()
+})
+
+
+/**
+ * @summary Update a savings goal
+ */
+export const UpdateSavingsGoalParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const UpdateSavingsGoalBody = zod.object({
+  "name": zod.string().optional(),
+  "targetAmount": zod.number().optional(),
+  "currentAmount": zod.number().optional(),
+  "deadline": zod.coerce.date().optional(),
+  "completed": zod.boolean().optional()
+})
+
+export const UpdateSavingsGoalResponse = zod.object({
+  "id": zod.number(),
+  "name": zod.string(),
+  "targetAmount": zod.number(),
+  "currentAmount": zod.number(),
+  "deadline": zod.coerce.date().nullish(),
+  "completed": zod.boolean(),
+  "createdAt": zod.string().optional()
+})
+
+
+/**
+ * @summary Delete a savings goal
+ */
+export const DeleteSavingsGoalParams = zod.object({
+  "id": zod.coerce.number()
+})
+
+export const DeleteSavingsGoalResponse = zod.void()
+
+
+/**
+ * @summary Load demo data (clears and seeds)
+ */
+export const LoadDemoDataResponse = zod.object({
+  "message": zod.string()
+})
+
+
+/**
+ * @summary Clear all user data
+ */
+export const ClearAllDataResponse = zod.object({
+  "message": zod.string()
 })
 
 
