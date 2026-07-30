@@ -15,8 +15,13 @@ export default function OnboardingScreen() {
   const queryClient = useQueryClient();
   const updateSettings = useUpdateSettings();
   const { data: income = [] } = useListIncome();
+  console.log("Income:", income);
+  console.log("Is array?", Array.isArray(income));
+
   const { data: bills = [] } = useListBills();
-  
+  console.log("Bills:", bills);
+  console.log("Is bills array?", Array.isArray(bills));
+
   const handleCalculate = () => {
     updateSettings.mutate({ data: { onboarded: true } }, {
       onSuccess: () => {

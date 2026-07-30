@@ -43,15 +43,34 @@ router.get("/income", async (req, res): Promise<void> => {
 });
 
 router.post("/income", async (req, res): Promise<void> => {
-  const parsed = CreateIncomeBody.safeParse(req.body);
-  if (!parsed.success) { res.status(400).json({ error: parsed.error.message }); return; }
+  try {
+    const parsed = CreateIncomeBody.safeParse(req.body);
 
-  const { amount, source, date, category } = parsed.data;
-  const [row] = await db.insert(incomeTable).values({
-    amount: String(amount), source: source ?? "", date: String(date), category: category ?? "other",
-  }).returning();
+    if (!parsed.success) {
+      console.error("Validation failed:");
+      console.error(parsed.error.format());
 
-  res.status(201).json(CreateIncomeResponse.parse(toRecord(row)));
+      res.status(400).json(parsed.error.format());
+      return;
+    }
+
+    const [row] = await db
+      .insert(incomeTable)
+      .values({
+        amount: String(parsed.data.amount),
+        source: parsed.data.source ?? "",
+        date: parsed.data.date.toISOString().split("T")[0],
+        category: parsed.data.category ?? "other",
+      })
+      .returning();
+
+    const response = CreateIncomeResponse.parse(toRecord(row));
+
+    res.status(201).json(response);
+  } catch (err) {
+  console.error(err);
+  res.status(500).json({ error: "Internal Server Error" });
+}
 });
 
 router.patch("/income/:id", async (req, res): Promise<void> => {
@@ -61,7 +80,7 @@ router.patch("/income/:id", async (req, res): Promise<void> => {
 
   const { amount, source, date, category } = parsed.data;
   const [row] = await db.update(incomeTable).set({
-    amount: String(amount), source: source ?? "", date: String(date), category: category ?? "other",
+    amount: String(amount), source: source ?? "", date: date.toISOString().split("T")[0], category: category ?? "other",
   }).where(eq(incomeTable.id, id)).returning();
 
   if (!row) { res.status(404).json({ error: "Not found" }); return; }
