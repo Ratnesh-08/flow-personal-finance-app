@@ -1,14 +1,14 @@
 import { Router, type IRouter } from "express";
-import healthRouter from "./health";
-import incomeRouter from "./income";
-import billsRouter from "./bills";
-import settingsRouter from "./settings";
-import dashboardRouter from "./dashboard";
-import analyticsRouter from "./analytics";
-import exportRouter from "./exportRoute";
-import recurringRouter from "./recurring";
-import savingsGoalsRouter from "./savingsGoals";
-import demoRouter from "./demo";
+import healthRouter from "./health.js";
+import incomeRouter from "./income.js";
+import billsRouter from "./bills.js";
+import settingsRouter from "./settings.js";
+import dashboardRouter from "./dashboard.js";
+import analyticsRouter from "./analytics.js";
+import exportRouter from "./exportRoute.js";
+import recurringRouter from "./recurring.js";
+import savingsGoalsRouter from "./savingsGoals.js";
+import demoRouter from "./demo.js";
 
 const router: IRouter = Router();
 
