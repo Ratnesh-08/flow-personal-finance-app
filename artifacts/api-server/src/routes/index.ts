@@ -1,4 +1,4 @@
-import { Router, type IRouter } from "express";
+import { Router } from "express";
 import healthRouter from "./health.js";
 import incomeRouter from "./income.js";
 import billsRouter from "./bills.js";
@@ -10,7 +10,7 @@ import recurringRouter from "./recurring.js";
 import savingsGoalsRouter from "./savingsGoals.js";
 import demoRouter from "./demo.js";
 
-const router: IRouter = Router();
+const router = Router();
 
 router.use(healthRouter);
 router.use(incomeRouter);
