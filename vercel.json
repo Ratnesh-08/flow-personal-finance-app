@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pnpm --filter @workspace/flow-app build",
+  "outputDirectory": "artifacts/flow-app/dist/public",
+  "functions": {
+    "api/index.ts": {
+      "runtime": "nodejs22.x"
+    }
+  }
+}
