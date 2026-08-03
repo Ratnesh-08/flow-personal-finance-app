@@ -1,6 +1,5 @@
 {
   "buildCommand": "pnpm --filter @workspace/flow-app build && rm -rf public && cp -r artifacts/flow-app/dist/public public",
   "outputDirectory": "public",
-  "framework": null,
   "installCommand": "pnpm install"
 }
